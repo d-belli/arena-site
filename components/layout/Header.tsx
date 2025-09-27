@@ -1,186 +1,229 @@
-'use client';
+/* eslint-disable react/jsx-no-comment-textnodes */
+"use client";
 
-import { useState, useEffect } from 'react';
-import Link from 'next/link';
-import { Menu, X, ChevronDown, Server, Globe, Gamepad2, Users } from 'lucide-react';
+import { useState } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import { Menu, X, Globe, Gamepad2, Server, Users } from "lucide-react";
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+} from "@/components/ui/navigation-menu";
 
-const Header = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
-  const [scrolled, setScrolled] = useState(false);
+const menuItems = [
+  {
+    title: "Hospedagens",
+    icon: Globe,
+    items: [
+      {
+        name: "Hospedagem de Sites",
+        href: "/hospedagens/sites",
+        description: "Sites rápidos e seguros",
+      },
+      {
+        name: "Hospedagem de Bots",
+        href: "/hospedagens/bots",
+        description: "Bots Discord, Telegram e mais",
+      },
+      {
+        name: "Hospedagem TeamSpeak",
+        href: "/hospedagens/teamspeak",
+        description: "Servidores de voz premium",
+      },
+    ],
+  },
+  {
+    title: "Jogos",
+    icon: Gamepad2,
+    items: [
+      {
+        name: "MTA SA",
+        href: "/jogos/mta",
+        description: "Servidores MTA otimizados",
+      },
+      {
+        name: "SAMP",
+        href: "/jogos/samp",
+        description: "Hospedagem SA-MP confiável",
+      },
+      {
+        name: "OpenMP",
+        href: "/jogos/openmp",
+        description: "Nova geração OpenMP",
+      },
+    ],
+  },
+  {
+    title: "Servidores",
+    icon: Server,
+    items: [
+      {
+        name: "VPS Brasil",
+        href: "/servidores/vps-brasil",
+        description: "Servidores virtuais no Brasil",
+      },
+      {
+        name: "VPS FiveM",
+        href: "/servidores/vps-fivem",
+        description: "Otimizados para FiveM",
+      },
+      {
+        name: "Servidor Dedicado",
+        href: "/servidores/dedicado",
+        description: "Máxima performance",
+      },
+    ],
+  },
+  {
+    title: "Revendas",
+    icon: Users,
+    items: [
+      {
+        name: "Revenda de Bots",
+        href: "/revendas/bots",
+        description: "Revenda hospedagem de bots",
+      },
+      {
+        name: "Revenda de Jogos",
+        href: "/revendas/jogos",
+        description: "Revenda servidores de jogos",
+      },
+      {
+        name: "Revenda cPanel",
+        href: "/revendas/cpanel",
+        description: "Revenda hospedagem cPanel",
+      },
+    ],
+  },
+];
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  const menuItems = [
-    {
-      title: 'Hospedagens',
-      icon: Globe,
-      items: [
-        { name: 'Hospedagem de Sites', href: '/hospedagens/sites' },
-        { name: 'Hospedagem de Bots', href: '/hospedagens/bots' },
-        { name: 'Hospedagem TeamSpeak', href: '/hospedagens/teamspeak' },
-      ]
-    },
-    {
-      title: 'Jogos',
-      icon: Gamepad2,
-      items: [
-        { name: 'MTA SA', href: '/jogos/mta' },
-        { name: 'SAMP', href: '/jogos/samp' },
-        { name: 'OpenMP', href: '/jogos/openmp' },
-      ]
-    },
-    {
-      title: 'Servidores',
-      icon: Server,
-      items: [
-        { name: 'VPS Brasil', href: '/servidores/vps-brasil' },
-        { name: 'VPS FiveM', href: '/servidores/vps-fivem' },
-        { name: 'Servidor Dedicado', href: '/servidores/dedicado' },
-      ]
-    },
-    {
-      title: 'Revendas',
-      icon: Users,
-      items: [
-        { name: 'Revenda de Bots', href: '/revendas/bots' },
-        { name: 'Revenda de Jogos', href: '/revendas/jogos' },
-        { name: 'Revenda cPanel', href: '/revendas/cpanel' },
-      ]
-    }
-  ];
+export function Header() {
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-      scrolled ? 'bg-[#0D0D0D]/95 backdrop-blur-md border-b border-[#333333]' : 'bg-transparent'
-    }`}>
-      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          {/* Logo */}
-          <Link href="/" className="flex items-center space-x-2 group">
-            <div className="w-10 h-10 cta-gradient rounded-lg flex items-center justify-center group-hover:scale-105 transition-transform">
-              <Server className="w-6 h-6 text-white" />
-            </div>
-            <span className="text-xl font-bold text-white group-hover:text-[#00CFFF] transition-colors">
-              Arena Hosting
-            </span>
-          </Link>
-
-          {/* Desktop Menu */}
-          <div className="hidden lg:flex items-center space-x-8">
+    <header className="sticky top-0 z-50 w-full border-b border-[#222222] bg-[#0D0D0D]/90 backdrop-blur-md">
+      <div className="container flex h-16 items-center justify-between px-4">
+        <Link href="/" className="flex items-center">
+          <Image
+            src="/logo.png"
+            alt="Logo ArenaHosting"
+            width={100}
+            height={40}
+            className="h-10 w-auto"
+            priority
+          />
+        </Link>
+        {/* Desktop Navigation */}
+        <NavigationMenu className="hidden lg:flex">
+          <NavigationMenuList>
             {menuItems.map((menu) => (
-              <div
-                key={menu.title}
-                className="relative group"
-                onMouseEnter={() => setActiveDropdown(menu.title)}
-                onMouseLeave={() => setActiveDropdown(null)}
-              >
-                <button className="flex items-center space-x-1 text-white hover:text-[#00CFFF] transition-colors py-2">
-                  <menu.icon className="w-4 h-4" />
-                  <span className="font-medium">{menu.title}</span>
-                  <ChevronDown className="w-4 h-4 transition-transform group-hover:rotate-180" />
-                </button>
-                
-                {activeDropdown === menu.title && (
-                  <div className="absolute top-full left-0 w-64 mt-2 card-dark rounded-lg shadow-2xl border border-[#333333] py-2 animate-fade-in">
+              <NavigationMenuItem key={menu.title}>
+                <NavigationMenuTrigger className="bg-transparent hover:bg-[#1A1A1A] text-white">
+                  <menu.icon className="w-4 h-4 mr-2" />
+                  {menu.title}
+                </NavigationMenuTrigger>
+                <NavigationMenuContent>
+                  <div className="grid w-[400px] gap-3 p-4">
                     {menu.items.map((item) => (
-                      <Link
-                        key={item.href}
-                        href={item.href}
-                        className="block px-4 py-3 text-[#B3B3B3] hover:text-white hover:bg-[#222222] transition-all"
-                      >
-                        {item.name}
-                      </Link>
+                      <NavigationMenuLink key={item.href} asChild>
+                        <Link
+                          href={item.href}
+                          className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-[#1A1A1A] hover:text-accent-foreground"
+                        >
+                          <div className="text-sm font-medium leading-none text-white">
+                            {item.name}
+                          </div>
+                          <p className="line-clamp-2 text-sm leading-snug text-[#B3B3B3]">
+                            {item.description}
+                          </p>
+                        </Link>
+                      </NavigationMenuLink>
                     ))}
                   </div>
-                )}
-              </div>
+                </NavigationMenuContent>
+              </NavigationMenuItem>
             ))}
-            
-            <Link href="/sobre" className="text-white hover:text-[#00CFFF] transition-colors font-medium">
-              Sobre
-            </Link>
-            <Link href="/contato" className="text-white hover:text-[#00CFFF] transition-colors font-medium">
-              Contato
-            </Link>
-            
-            <Link
-              href="/contato"
-              className="cta-gradient text-white px-6 py-2 rounded-lg font-semibold hover:shadow-lg hover:shadow-orange-500/25 transition-all hover:scale-105"
-            >
-              Começar Agora
-            </Link>
-          </div>
+          </NavigationMenuList>
+        </NavigationMenu>
 
-          {/* Mobile Menu Button */}
-          <button
-            className="lg:hidden text-white hover:text-[#00CFFF] transition-colors"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-          >
-            {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
+        {/* Desktop CTA */}
+        <div className="hidden lg:flex items-center space-x-4">
+          <Link href="/contato">
+            <Button variant="ghost" className="text-white hover:bg-[#1A1A1A]">
+              Contato
+            </Button>
+          </Link>
+          <Link href="/sobre">
+            <Button variant="ghost" className="text-white hover:bg-[#1A1A1A]">
+              Sobre Nós
+            </Button>
+          </Link>
+          <Button className="gradient-cta text-white font-semibold px-6">
+            Começar Agora
+          </Button>
         </div>
 
-        {/* Mobile Menu */}
-        {isMenuOpen && (
-          <div className="lg:hidden card-dark mt-4 rounded-lg border border-[#333333] animate-fade-in">
-            <div className="py-4">
-              {menuItems.map((menu) => (
-                <div key={menu.title} className="mb-4">
-                  <div className="flex items-center space-x-2 px-4 py-2 text-white font-medium">
-                    <menu.icon className="w-4 h-4" />
-                    <span>{menu.title}</span>
-                  </div>
-                  <div className="pl-8">
-                    {menu.items.map((item) => (
-                      <Link
-                        key={item.href}
-                        href={item.href}
-                        className="block py-2 text-[#B3B3B3] hover:text-white transition-colors"
-                        onClick={() => setIsMenuOpen(false)}
-                      >
-                        {item.name}
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-              ))}
-              
-              <div className="border-t border-[#333333] pt-4 px-4">
-                <Link
-                  href="/sobre"
-                  className="block py-2 text-white hover:text-[#00CFFF] transition-colors"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Sobre
-                </Link>
-                <Link
-                  href="/contato"
-                  className="block py-2 text-white hover:text-[#00CFFF] transition-colors"
-                  onClick={() => setIsMenuOpen(false)}
+        {/* Mobile Menu Button */}
+        <Button
+          variant="ghost"
+          className="lg:hidden"
+          onClick={() => setIsOpen(!isOpen)}
+        >
+          {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+        </Button>
+      </div>
+
+      {/* Mobile Menu */}
+      {isOpen && (
+        <div className="lg:hidden border-t border-[#222222] bg-[#0D0D0D]/95 backdrop-blur-md">
+          <div className="container px-4 py-6 space-y-4">
+            {menuItems.map((menu) => (
+              <div key={menu.title} className="space-y-2">
+                <h3 className="text-sm font-semibold text-[#B3B3B3] uppercase tracking-wider">
+                  {menu.title}
+                </h3>
+                {menu.items.map((item) => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className="block py-2 text-white hover:text-[#00CFFF] transition-colors"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    {item.name}
+                  </Link>
+                ))}
+              </div>
+            ))}
+
+            <div className="pt-4 space-y-2">
+              <Link href="/contato" onClick={() => setIsOpen(false)}>
+                <Button
+                  variant="ghost"
+                  className="w-full justify-start text-white hover:bg-[#1A1A1A]"
                 >
                   Contato
-                </Link>
-                <Link
-                  href="/contato"
-                  className="inline-block mt-4 cta-gradient text-white px-6 py-2 rounded-lg font-semibold"
-                  onClick={() => setIsMenuOpen(false)}
+                </Button>
+              </Link>
+              <Link href="/sobre" onClick={() => setIsOpen(false)}>
+                <Button
+                  variant="ghost"
+                  className="w-full justify-start text-white hover:bg-[#1A1A1A]"
                 >
-                  Começar Agora
-                </Link>
-              </div>
+                  Sobre Nós
+                </Button>
+              </Link>
+              <Button className="w-full gradient-cta text-white font-semibold">
+                Começar Agora
+              </Button>
             </div>
           </div>
-        )}
-      </nav>
+        </div>
+      )}
     </header>
   );
-};
-
-export default Header;
+}
